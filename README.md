@@ -1,6 +1,8 @@
 # CGPA Calculator
 A clean, responsive, and easy-to-use CGPA calculator tailored specifically for **BRAC University (BRACU)** students.
 
+## Preview
+![CGPA Calculator Preview](./assets/preview.png)
 
 ## Features
 - Completed Credits & Current CGPA Input
