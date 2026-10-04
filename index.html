@@ -5,61 +5,74 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="index.css">
-    <title>CGPA Calculator</title>
+    <title>CGPA Calculator | BRACU</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- =================  GitHub Logo  ================  -->
-    <div id="git_link">
-        <a href="https://github.com/niloyahsan1/cgpacheck.git"><img src="./photos/git.png" id="github"></a>
-    </div>
-    <!-- =================  GitHub Logo  ================  -->
+    <!-- GitHub Header Link Bar -->
+    <header id="git_link">
+        <a href="https://github.com/niloyahsan1/cgpacheck.git" target="_blank" rel="noopener noreferrer"
+            title="View Source on GitHub">
+            <img src="./assets/github-logo.webp" id="github" alt="GitHub Logo">
+        </a>
+    </header>
 
+    <main class="container">
+        <div class="card">
+            <h1>CGPA Calculator</h1>
+            <p class="subtitle">Specially designed for BRACU Students</p>
 
-    <h1>CGPA Calculator</h1>
-    <form>
-        <div>
-            <label for="cdcom">Credit Completed:</label>
-            <input type="number" id="cdcom" name="cdcom" required>
+            <form id="cgpaForm">
+                <div class="form-group">
+                    <label for="cdcom">Credit Completed:</label>
+                    <input type="number" id="cdcom" name="cdcom" min="0" placeholder="e.g. 90" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="oldcgpa">Current CGPA:</label>
+                    <input type="number" step="0.01" min="0" max="4.00" id="oldcgpa" name="oldcgpa"
+                        placeholder="e.g. 3.50" required>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="hasCSE400" name="hasCSE400">
+                    <label for="hasCSE400">Have you taken CSE400? (4 Credits)</label>
+                </div>
+
+                <div id="cse400GpaInput"></div>
+
+                <div class="form-group">
+                    <label for="courseCount">Number of Courses (3 Credits each):</label>
+                    <select id="courseCount" name="courseCount" required>
+                        <option value="0">0 Courses</option>
+                        <option value="1">1 Course</option>
+                        <option value="2">2 Courses</option>
+                        <option value="3">3 Courses</option>
+                        <option value="4">4 Courses</option>
+                        <option value="5">5 Courses</option>
+                    </select>
+                </div>
+
+                <div id="courseGpaInputs"></div>
+
+                <button type="submit" id="calculateButton">Calculate CGPA</button>
+            </form>
+
+            <div class="result-container" id="resultBox" style="display: none;">
+                <div class="result-card">
+                    <span class="result-label">Calculated CGPA</span>
+                    <h2 id="resultText">0.00</h2>
+                    <button type="button" id="startOverButton">Start Over</button>
+                </div>
+            </div>
         </div>
-        <div>
-            <label for="oldcgpa">Current CGPA:</label>
-            <input type="number" step="0.01" id="oldcgpa" name="oldcgpa" required>
-        </div>
-
-        <div>
-            <label for="hasCSE400">Have you taken CSE400?</label>
-            <input type="checkbox" id="hasCSE400" name="hasCSE400">
-        </div>
-        <div id="courseGpaInputs"></div>
-        <div id="cse400GpaInput"></div> <!-- CSE400 GPA input -->
-
-<div>
-    <label for="courseCount">Number of Courses:</label>
-    <select id="courseCount" name="courseCount" required>
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-    </select>
-</div>
-
-        <div id="courseGpaInputs">
-        </div>
-
-        <button type="submit" id="calculateButton">Calculate CGPA</button>
-    </form>
-
-    <div class="center-button">
-        <div class="box" id="resultBox">
-            <p id="resultText"></p>
-            <a href="index.html"><button type="submit">Start Over</button></a>
-        </div>
-    </div>
+    </main>
 
     <script src="script.js"></script>
 </body>

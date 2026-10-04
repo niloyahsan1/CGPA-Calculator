@@ -3,71 +3,88 @@ document.addEventListener("DOMContentLoaded", function () {
     var courseGpaInputs = document.getElementById("courseGpaInputs");
     var hasCSE400Checkbox = document.getElementById("hasCSE400");
     var cse400GpaInput = document.getElementById("cse400GpaInput");
+    var cgpaForm = document.getElementById("cgpaForm");
+    var resultText = document.getElementById("resultText");
+    var resultBox = document.getElementById("resultBox");
+    var startOverButton = document.getElementById("startOverButton");
 
-    // Update course GPA inputs based on selected course count
     courseCountSelect.addEventListener("change", function () {
-        var courseCount = parseInt(courseCountSelect.value);
-        courseGpaInputs.innerHTML = ""; // Clear previous inputs
+        var courseCount = parseInt(courseCountSelect.value) || 0;
+        courseGpaInputs.innerHTML = "";
 
         if (courseCount > 0) {
             for (var i = 1; i <= courseCount; i++) {
                 var div = document.createElement("div");
+                div.className = "form-group";
                 div.innerHTML = `
-                    <label for="c${i}_gpa">Course ${i} GPA:</label>
-                    <input type="number" step="0.01" id="c${i}_gpa" name="c${i}_gpa" required>
+                    <label for="c${i}_gpa">Course ${i} GPA (3 Credits):</label>
+                    <input type="number" step="0.01" min="0" max="4.00" id="c${i}_gpa" name="c${i}_gpa" placeholder="e.g. 4.00" required>
                 `;
                 courseGpaInputs.appendChild(div);
             }
         }
     });
 
-    // Show CSE400 GPA input when checkbox is checked
     hasCSE400Checkbox.addEventListener("change", function () {
         if (hasCSE400Checkbox.checked) {
             cse400GpaInput.innerHTML = `
-                <label for="cse400_gpa">CSE400 GPA:</label>
-                <input type="number" step="0.01" id="cse400_gpa" name="cse400_gpa" required>
+                <div class="form-group">
+                    <label for="cse400_gpa">CSE400 GPA (4 Credits):</label>
+                    <input type="number" step="0.01" min="0" max="4.00" id="cse400_gpa" name="cse400_gpa" placeholder="e.g. 4.00" required>
+                </div>
             `;
         } else {
-            cse400GpaInput.innerHTML = ""; // Clear CSE400 input if unchecked
+            cse400GpaInput.innerHTML = "";
         }
     });
 
-    document.getElementById("calculateButton").addEventListener("click", function (event) {
+    cgpaForm.addEventListener("submit", function (event) {
         event.preventDefault();
 
-        var cdcom = parseInt(document.getElementById("cdcom").value);
-        var oldcgpa = parseFloat(document.getElementById("oldcgpa").value);
-        var courseCount = parseInt(courseCountSelect.value);
+        var cdcom = parseFloat(document.getElementById("cdcom").value) || 0;
+        var oldcgpa = parseFloat(document.getElementById("oldcgpa").value) || 0;
+        var courseCount = parseInt(courseCountSelect.value) || 0;
         var hasCSE400 = hasCSE400Checkbox.checked;
 
         var lastsempoints = cdcom * oldcgpa;
         var recentpoints = 0;
         var newcd = courseCount * 3;
 
-        // Calculate points for regular courses if courseCount > 0
         if (courseCount > 0) {
             for (var i = 1; i <= courseCount; i++) {
-                var courseGpa = parseFloat(document.getElementById(`c${i}_gpa`).value);
-                recentpoints += 3 * courseGpa; // Assuming each course has 3 credits
+                var inputEl = document.getElementById(`c${i}_gpa`);
+                var courseGpa = inputEl ? parseFloat(inputEl.value) || 0 : 0;
+                recentpoints += 3 * courseGpa;
             }
         }
 
-        // Add points for CSE400 if taken
         if (hasCSE400) {
-            var cse400Gpa = parseFloat(document.getElementById("cse400_gpa").value);
-            recentpoints += 4 * cse400Gpa; // Assuming CSE400 has 4 credits
-            newcd += 4; // Add 4 credits for CSE400
+            var cse400Input = document.getElementById("cse400_gpa");
+            var cse400Gpa = cse400Input ? parseFloat(cse400Input.value) || 0 : 0;
+            recentpoints += 4 * cse400Gpa;
+            newcd += 4;
         }
 
-        var res = lastsempoints + recentpoints;
-        var FINAL = res / (cdcom + newcd);
-        var CGPA = Math.round(FINAL * 100) / 100;
+        var totalCredits = cdcom + newcd;
+        if (totalCredits <= 0) {
+            resultText.textContent = "0.00";
+        } else {
+            var FINAL = (lastsempoints + recentpoints) / totalCredits;
+            var CGPA = Math.round(FINAL * 100) / 100;
+            resultText.textContent = CGPA.toFixed(2);
+        }
 
-        var resultText = document.getElementById("resultText");
-        var resultBox = document.getElementById("resultBox");
-
-        resultText.textContent = "Your CGPA is " + CGPA;
         resultBox.style.display = "block";
+        resultBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
+
+    if (startOverButton) {
+        startOverButton.addEventListener("click", function () {
+            cgpaForm.reset();
+            courseGpaInputs.innerHTML = "";
+            cse400GpaInput.innerHTML = "";
+            resultBox.style.display = "none";
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
 });
