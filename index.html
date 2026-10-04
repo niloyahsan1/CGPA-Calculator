@@ -5,17 +5,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CGPA Calculator | BRACU</title>
+    <title>CGPA Calculator</title>
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- GitHub Header Link Bar -->
+    <!-- GitHub Sticky Top Bar -->
     <header id="git_link">
         <a href="https://github.com/niloyahsan1/cgpacheck.git" target="_blank" rel="noopener noreferrer"
             title="View Source on GitHub">
@@ -23,55 +25,103 @@
         </a>
     </header>
 
+    <div class="app-header">
+        <h1>CGPA Calculator</h1>
+        <p class="subtitle">Calculate Your Academic Standing</p>
+    </div>
+
     <main class="container">
-        <div class="card">
-            <h1>CGPA Calculator</h1>
-            <p class="subtitle">Specially designed for BRACU Students</p>
+        <form id="cgpaForm" class="asymmetric-grid">
 
-            <form id="cgpaForm">
-                <div class="form-group">
-                    <label for="cdcom">Credit Completed:</label>
-                    <input type="number" id="cdcom" name="cdcom" min="0" placeholder="e.g. 90" required>
+            <!-- Card 01: Academic History (Top-Left) -->
+            <section class="panel glass-card card-academic">
+                <div class="panel-header">
+                    <span class="step-badge">01</span>
+                    <h2>Academic History</h2>
                 </div>
+                <div class="panel-body">
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="cdcom">Credit Completed</label>
+                            <input type="number" id="cdcom" name="cdcom" min="0" placeholder="e.g. 90" required>
+                        </div>
 
-                <div class="form-group">
-                    <label for="oldcgpa">Current CGPA:</label>
-                    <input type="number" step="0.01" min="0" max="4.00" id="oldcgpa" name="oldcgpa"
-                        placeholder="e.g. 3.50" required>
+                        <div class="form-group">
+                            <label for="oldcgpa">Current CGPA</label>
+                            <input type="number" step="0.01" min="0" max="4.00" id="oldcgpa" name="oldcgpa"
+                                placeholder="e.g. 3.50" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group toggle-card">
+                        <div class="toggle-text">
+                            <span class="toggle-title">Have you taken CSE400?</span>
+                            <span class="toggle-sub">Thesis / Project (4 Credits)</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="hasCSE400" name="hasCSE400">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="courseCount">Number of Courses (3 Credits each)</label>
+                        <div class="select-wrapper">
+                            <select id="courseCount" name="courseCount" required>
+                                <option value="0">0 Courses</option>
+                                <option value="1">1 Course</option>
+                                <option value="2">2 Courses</option>
+                                <option value="3">3 Courses</option>
+                                <option value="4">4 Courses</option>
+                                <option value="5">5 Courses</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
+            </section>
 
-                <div class="form-group checkbox-group">
-                    <input type="checkbox" id="hasCSE400" name="hasCSE400">
-                    <label for="hasCSE400">Have you taken CSE400? (4 Credits)</label>
+            <!-- Card 02: Semester Grades (Top-Right, Side-by-Side with Card 1) -->
+            <section class="panel glass-card card-grades">
+                <div class="panel-header">
+                    <span class="step-badge">02</span>
+                    <h2>Semester Grades</h2>
                 </div>
-
-                <div id="cse400GpaInput"></div>
-
-                <div class="form-group">
-                    <label for="courseCount">Number of Courses (3 Credits each):</label>
-                    <select id="courseCount" name="courseCount" required>
-                        <option value="0">0 Courses</option>
-                        <option value="1">1 Course</option>
-                        <option value="2">2 Courses</option>
-                        <option value="3">3 Courses</option>
-                        <option value="4">4 Courses</option>
-                        <option value="5">5 Courses</option>
-                    </select>
+                <div class="panel-body">
+                    <div id="cse400GpaInput"></div>
+                    <div id="courseGpaInputs"></div>
+                    <div id="emptyCoursesNotice" class="empty-notice">
+                        <p>Select your courses or enable CSE400 to enter grades.</p>
+                    </div>
                 </div>
-
-                <div id="courseGpaInputs"></div>
-
-                <button type="submit" id="calculateButton">Calculate CGPA</button>
-            </form>
-
-            <div class="result-container" id="resultBox" style="display: none;">
-                <div class="result-card">
-                    <span class="result-label">Calculated CGPA</span>
-                    <h2 id="resultText">0.00</h2>
-                    <button type="button" id="startOverButton">Start Over</button>
+                <div class="panel-footer">
+                    <button type="submit" id="calculateButton" class="btn-solid">Calculate CGPA</button>
                 </div>
-            </div>
-        </div>
+            </section>
+
+            <!-- Card 03: Result & Summary (Bottom of Card 1) -->
+            <section class="panel glass-card result-panel card-result">
+                <div class="panel-header">
+                    <span class="step-badge highlight">03</span>
+                    <h2>Result & Summary</h2>
+                </div>
+                <div class="panel-body">
+                    <div id="resultPlaceholder" class="empty-notice">
+                        <p>Fill in your academic details and click Calculate to view your CGPA result.</p>
+                    </div>
+
+                    <div class="result-container" id="resultBox" style="display: none;">
+                        <div class="result-card">
+                            <div class="score-display">
+                                <h2 id="resultText" class="cgpa-number">0.00</h2>
+                            </div>
+
+                            <button type="button" id="startOverButton" class="btn-secondary">Start Over</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </form>
     </main>
 
     <script src="script.js"></script>
