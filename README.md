@@ -29,4 +29,4 @@ $$\text{New CGPA} = \frac{(\text{Completed Credits} \times \text{Current CGPA}) 
 
 
 ## Developed By
-[niloyahsan1](https://github.com/niloyahsan1)
+- [Niloy Ahsan](https://github.com/niloyahsan1)
